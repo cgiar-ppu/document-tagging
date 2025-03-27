@@ -24,15 +24,18 @@ row_2 = questions_df.iloc[1]  # Get the second row (index 1)
 
 # Columns A to J (indexes 0 to 9) need a prefix prompt
 prefix = "After having gone through the PDF/document above, extract the specific parameter outlined below based on the contextual description/information accompanying it, and always replying strictly as outlined in the Output Format below."
-parameters = row_2.iloc[0:10].dropna().tolist()  # Adjusted to 10 columns
+parameters = row_2.iloc[0:16].dropna().tolist()  # Adjusted to 10 columns
+# Store original parameters for output
+original_questions = parameters.copy()
 prefixed_parameters = [prefix + param for param in parameters]
-
 
 # Commenting out the full questions from columns I to Q (indexes 8 to 16)
 # questions = row_2.iloc[9:35].dropna().tolist()
 
 # Combine all questions (only using prefixed parameters now)
 all_questions = prefixed_parameters  # + questions
+# Store mapping between prefixed and original questions
+question_mapping = dict(zip(prefixed_parameters, original_questions))
 
 def remove_markdown_code_fences(text: str) -> str:
     """
@@ -126,6 +129,8 @@ def process_pdfs_single_question():
                 for future in as_completed(futures):
                     result = future.result()
                     if result:
+                        # Map back to original question for output
+                        result['Question'] = question_mapping[result['Question']]
                         results.append(result)
 
     # Save results to Excel
