@@ -25,6 +25,9 @@ REDUCTION_FACTOR = 0.9  # Reduce text size by 10% on failure
 AVAILABLE_MODELS = {
     'gpt-4o': {'provider': 'openai', 'name': 'gpt-4o'},
     'o1': {'provider': 'openai', 'name': 'o1'},
+    'o3': {'provider': 'openai', 'name': 'o3'},
+    'gpt-4.1': {'provider': 'openai', 'name': 'gpt-4.1'},
+    'o4-mini': {'provider': 'openai', 'name': 'o4-mini'},
     'gpt-3.5-turbo': {'provider': 'openai', 'name': 'gpt-3.5-turbo'},
     'claude-3-opus': {'provider': 'anthropic', 'name': 'claude-3-opus'},
     'claude-3-sonnet': {'provider': 'anthropic', 'name': 'claude-3-sonnet'},
