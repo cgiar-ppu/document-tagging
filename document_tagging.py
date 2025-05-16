@@ -51,8 +51,8 @@ AVAILABLE_MODELS: Dict[str, Dict[str, str]] = {
 }
 
 # Normal‑LLMs vs reasoning‑LLMs ────────────────────────────────────────────────
-DEFAULT_SIMPLE_MODELS = ["gpt-4o", "gpt-4.1"]          # "normal" LLMs
-DEFAULT_ANALYTICAL_MODELS = ["o1", "o3", "o4-mini"]    # "reasoning" LLMs
+DEFAULT_SIMPLE_MODELS = ["gpt-4.1"]          # "normal" LLMs
+DEFAULT_ANALYTICAL_MODELS = ["o1", "o3"]    # "reasoning" LLMs
 
 # Single OpenAI client for the lightweight/simple pipeline
 openai_client = OpenAI()
@@ -120,7 +120,7 @@ def _load_questions(xlsx_path: str) -> tuple[list[str], dict[str, str]]:
         "Format below."
     )
 
-    parameters = row_2.iloc[0:19].dropna().tolist()
+    parameters = row_2.dropna().tolist()
     prefixed = [prefix + param for param in parameters]
     return prefixed, dict(zip(prefixed, parameters))
 
