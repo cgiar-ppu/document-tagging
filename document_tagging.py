@@ -319,24 +319,55 @@ def main(
         return
 
     # ------------------------------------------------------------------
-    # Persist results to Excel in both long and pivoted shape
+    # Persist results to Excel in various formats
     # ------------------------------------------------------------------
     df = pd.DataFrame(all_results)
-    wide = df.pivot_table(
-        index=["Document", "Model", "Approach"],
+    
+    # Separate simple and analytical results
+    simple_df = df[df['Approach'] == 'simple']
+    analytical_df = df[df['Approach'] == 'analytical']
+    
+    # Create and save simple model results
+    simple_wide = simple_df.pivot_table(
+        index=["Document"],
         columns="Question",
         values="Answer",
         aggfunc="first",
     ).reset_index()
+    
+    # Create and save analytical model results
+    analytical_wide = analytical_df.pivot_table(
+        index=["Document"],
+        columns="Question",
+        values="Answer",
+        aggfunc="first",
+    ).reset_index()
+    
+    # Create combined results
+    wide = simple_wide.copy()
+    if not analytical_df.empty:
+        for question in analytical_df['Question'].unique():
+            col_name = f"{question}_analytical"
+            analytical_answers = analytical_df[analytical_df['Question'] == question].set_index('Document')['Answer']
+            wide[col_name] = wide['Document'].map(analytical_answers)
 
+    # Save all formats
     out_long = f"output_combined_{TIMESTAMP}.xlsx"
     out_pivot = f"output_combined_pivoted_{TIMESTAMP}.xlsx"
+    out_simple = f"output_simple_{TIMESTAMP}.xlsx"
+    out_analytical = f"output_analytical_{TIMESTAMP}.xlsx"
 
     df.to_excel(out_long, index=False)
     wide.to_excel(out_pivot, index=False)
+    simple_wide.to_excel(out_simple, index=False)
+    analytical_wide.to_excel(out_analytical, index=False)
 
     print(
-        f"\n✓ Analysis complete – results written to:\n  • {out_long}\n  • {out_pivot}"
+        f"\n✓ Analysis complete – results written to:"
+        f"\n  • {out_long}"
+        f"\n  • {out_pivot}"
+        f"\n  • {out_simple}"
+        f"\n  • {out_analytical}"
     )
 
 
