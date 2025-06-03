@@ -23,7 +23,7 @@ INPUT_FOLDER_ANALYTICAL = "input_taggedstudies"  # reasoning‑LLM pipeline
 INPUT_FOLDER_SIMPLE = "input_taggedstudies"      # normal‑LLM pipeline
 
 QUESTIONS_FILE_ANALYTICAL = "questions_v3v2_hugo.xlsx"
-QUESTIONS_FILE_SIMPLE = "questions_v3v2_March31.xlsx"
+QUESTIONS_FILE_SIMPLE = "questions_v3v2_June03.xlsx"
 
 MAX_WORKERS = 10
 MAX_TOKENS = 200_000
@@ -109,9 +109,9 @@ def setup_llm(model_config: Dict[str, str]):
 # ──────────────────────────────────────────────────────────────────────────────
 
 def _load_questions(xlsx_path: str) -> tuple[list[str], dict[str, str]]:
-    """Read the second row of the sheet and prepend the autonomous‑prompt."""
+    """Read the first row of the sheet and prepend the autonomous‑prompt."""
     questions_df = pd.read_excel(xlsx_path, header=None)
-    row_2 = questions_df.iloc[1]
+    row_1 = questions_df.iloc[0]
 
     prefix = (
         "After having gone through the PDF/document above, extract the specific "
@@ -120,7 +120,7 @@ def _load_questions(xlsx_path: str) -> tuple[list[str], dict[str, str]]:
         "Format below."
     )
 
-    parameters = row_2.dropna().tolist()
+    parameters = row_1.dropna().tolist()
     prefixed = [prefix + param for param in parameters]
     return prefixed, dict(zip(prefixed, parameters))
 
