@@ -52,7 +52,7 @@ AVAILABLE_MODELS: Dict[str, Dict[str, str]] = {
 
 # Normal‑LLMs vs reasoning‑LLMs ────────────────────────────────────────────────
 DEFAULT_SIMPLE_MODELS = ["gpt-4.1"]          # "normal" LLMs
-DEFAULT_ANALYTICAL_MODELS = ["o1", "o3"]    # "reasoning" LLMs
+DEFAULT_ANALYTICAL_MODELS = ["o1"]    # "reasoning" LLMs
 
 # Single OpenAI client for the lightweight/simple pipeline
 openai_client = OpenAI()
@@ -62,7 +62,7 @@ openai_client = OpenAI()
 # -----------------------------------------------------------------------------
 
 def setup_llm(model_config: Dict[str, str]):
-    """Instantiate an LLM wrapper (LangChain) respecting every provider’s quirks.
+    """Instantiate an LLM wrapper (LangChain) respecting every provider's quirks.
 
     **OpenAI specifics**
     ───────────────────
